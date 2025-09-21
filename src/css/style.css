@@ -123,7 +123,7 @@
 
 #park-header img{
   grid-column: 1 / -1;
-  grid-row: 1 / -1;               /* sits behind both rows */
+  grid-row: 1 / -1;/* sits behind both rows */
   height: 400px;
   width: 100%;
   object-fit: cover;
@@ -132,12 +132,12 @@
 
 .subheading{
   grid-column: 1 / -1;
-  grid-row: 2;                    /* bottom row only */
+  grid-row: 2;/* bottom row only */
   display: grid;
   grid-template-columns: auto auto;
   column-gap: .75rem;
-  align-items: center;                 /* vertical alignment */
-  justify-content: start;              /* keep both cols on the left */
+  align-items: center;/* vertical alignment */
+  justify-content: start;/* keep both cols on the left */
   padding: 1rem 1.25rem;
   background: rgba(0,0,0,.6);
   z-index: 1;
