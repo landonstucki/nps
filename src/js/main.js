@@ -1,51 +1,27 @@
-import { getParkData } from "./parkService.mjs";
-import { getParkInfo } from "./parkService.mjs";
+import { getParkData, getInfoLinks } from "./parkService.mjs";
+import setHeaderFooter from "./setHeaderFooter.mjs";
 import { mediaCardTemplate } from "./templates.mjs";
-import { footerTemplate } from "./templates.mjs";
-const parkData = getParkData();
-const parkInfoLinks = getParkInfo();
-function setHeaderInfo(parkData){
-    // Disclaimer Section (White Space Top)
-    const disclaimer = document.querySelector(".disclaimer > a");
-    disclaimer.href = parkData.url; //Set Url
-    disclaimer.innerHTML = parkData.fullName; // Set Park Full NAme
-    // Park Photo
-    const parkPhoto = document.querySelector("#park-header > img");
-    parkPhoto.src = parkData.images[0].url;
-    parkPhoto.alt = parkData.images[0].altText; 
 
-    // Grey Space Bottom Above Nav Bar
-    // Park Name
-    const parkName = document.querySelector("h2.global-nav__section-heading");
-    parkName.innerHTML = parkData.name;
-    //Park Designation
-    const designation = document.querySelector(".subheadingtext1");
-    designation.innerHTML = parkData.designation;
-    // Park Location
-    const locations = document.querySelector(".subheadingtext2");
-    locations.innerHTML = parkData.states;
+function setParkIntro(data) {
+  const introEl = document.querySelector(".intro");
+  introEl.innerHTML = `<h1>${data.fullName}</h1>
+  <p>${data.description}</p>`;
 }
 
-function setIntro(parkData){ // Use Park Data Json as parameter.
-  const title = document.querySelector(".intro h1"); // Query select the <h1> in 'section intro'.
-  title.innerHTML = parkData.fullName; // Insert parkData.fullName inside .intro selected tag <h1>.
-  const intro = document.querySelector(".intro p"); // Query select the <p> in 'section intro'.
-  intro.innerHTML = parkData.description; // Insert parkData.description inside .intro selected tag <p>.
+function setParkInfoLinks(data) {
+  const infoEl = document.querySelector(".info");
+  // we have multiple links to build...so we map to transform the array of objects into an array of HTML strings.
+  const html = data.map(mediaCardTemplate);
+  // join the array of strings into one string and insert it into the section
+  infoEl.insertAdjacentHTML("afterbegin", html.join(""));
 }
 
-function setParkInfo(data){
-  const cardArray = data.map(mediaCardTemplate); // Creates an Array using the map function.
-  const html = cardArray.join(""); // Converts the array to valid html (a single string).
-  const info = document.querySelector(".info");
-  info.innerHTML = html; // Sets the selected HTML.
+async function init() {
+  const parkData = await getParkData();
+  const links = getInfoLinks(parkData.images);
+  setHeaderFooter(parkData);
+  setParkIntro(parkData);
+  setParkInfoLinks(links);
 }
 
-function setFooter(data) {
-  const footerEl = document.querySelector("#park-footer");
-  footerEl.innerHTML = footerTemplate(data);
-}
-
-setHeaderInfo(parkData);
-setIntro(parkData);
-setParkInfo(parkInfoLinks);
-setFooter(parkData);
+init();

@@ -178,7 +178,6 @@ const park = {
   name: "Yellowstone",
   designation: "National Park"
 };
-
 const parkInfoLinks = [
   {
     name: "Current Conditions &#x203A;",
@@ -201,10 +200,37 @@ const parkInfoLinks = [
   }
 ];
 
-export function getParkData() {
-  return park;
+const baseUrl = "https://developer.nps.gov/api/v1/";
+const apiKey = import.meta.env.VITE_NPS_API_KEY;
+
+async function getJson(url) {
+  console.log("apiKey in JS:", apiKey);
+
+  const options = {
+    method: "GET",
+    headers: {
+      "X-Api-Key": apiKey
+    }
+  };
+  let data = {};
+  const response = await fetch(baseUrl + url, options);
+  if (response.ok) {
+    data = await response.json();
+  } else throw new Error("response not ok");
+  return data;
 }
 
-export function getParkInfo(){
-  return parkInfoLinks;
+
+export function getInfoLinks(data) {
+  // Why index + 2 below? no real reason. we don't want index 0 since that is the one we used for the banner...I decided to skip an image.
+  const withUpdatedImages = parkInfoLinks.map((item, index) => {
+    item.image = data[index + 2].url;
+    return item;
+  });
+  return withUpdatedImages;
+}
+
+export async function getParkData() {
+  const parkData = await getJson("parks?parkCode=glac");
+  return parkData.data[0];
 }
