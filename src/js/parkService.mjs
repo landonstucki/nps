@@ -228,6 +228,8 @@ export function getInfoLinks(data) {
 }
 
 export async function getParkData() {
+  // https://developer.nps.gov/api/v1/parks?parkCode=yell
+  // https://developer.nps.gov/api/v1/alerts?parkCode=yell
   const parkData = await getJson("parks?parkCode=yell");
   return parkData.data[0];
 }
