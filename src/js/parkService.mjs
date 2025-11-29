@@ -228,9 +228,7 @@ export function getInfoLinks(data) {
 }
 
 export async function getParkData() {
-  // https://developer.nps.gov/api/v1/parks?parkCode=yell
-  // https://developer.nps.gov/api/v1/alerts?parkCode=yell
-  const parkData = await getJson("parks?parkCode=yell");
+  const parkData = await getJson("parks?parkCode=yell ");
   return parkData.data[0];
 }
 
@@ -242,4 +240,9 @@ export async function getParkAlerts(code) {
 export async function getParkVisitorCenters(code) {
   const parkData = await getJson(`visitorcenters?parkCode=${code}`);
   return parkData.data;
+}
+
+export async function getParkVisitorCenterDetails(id) {
+  const parkData = await getJson(`visitorcenters?id=${id}`);
+  return parkData.data[0];
 }
